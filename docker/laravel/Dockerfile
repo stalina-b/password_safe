@@ -1,4 +1,4 @@
-FROM php:8.2-alpine3.17
+FROM php:8.2-fpm-alpine3.17
 
 COPY ./api /api
 
@@ -9,6 +9,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 RUN apk add git
+RUN docker-php-ext-install pdo pdo_mysql && docker-php-ext-enable pdo_mysql
 RUN composer install
 RUN php artisan key:generate
 

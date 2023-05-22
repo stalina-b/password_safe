@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\PasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,12 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/passwords', [PasswordController::class, 'index']);
+Route::post('/passwords', [PasswordController::class, 'store']);
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::post('/auth/register', [AuthController::class, 'register']);
-Route::post('/auth/login', [AuthController::class, 'login']);
-Route::get('/login', function () {
-    return json_encode(["message" => "Please login to continue"]);
-})->name('login');

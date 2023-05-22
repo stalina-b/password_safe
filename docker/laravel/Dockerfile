@@ -1,4 +1,4 @@
-FROM php:8.2
+FROM php:8.2-alpine3.17
 
 COPY ./api /api
 
@@ -8,6 +8,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
+RUN apk add git
 RUN composer install
 RUN php artisan key:generate
 

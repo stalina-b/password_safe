@@ -1,0 +1,51 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/laravel/Dockerfile
+    networks:
+      - password_safe
+    volumes:
+      - ./api:/api
+    ports:
+      - ${API_HTTP_PORT:-81}:80
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+    restart: always
+
+  node:
+    build:
+      context: .
+      dockerfile: docker/node/Dockerfile
+    networks:
+      - password_safe
+    volumes:
+      - ./web:/web
+    ports:
+      - ${NODE_HTTP_PORT:-82}:5173
+    env_file:
+      - .env
+    depends_on:
+      - api
+    restart: always
+
+  mysql:
+    image: mysql:8.0
+    networks:
+      - password_safe
+    volumes:
+      - /tmp/mysql-data:/mysql
+    ports:
+      - ${MYSQL_PORT:-3307}:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-password_safe}
+    env_file:
+      - .env
+    restart: always
+
+networks:
+  password_safe:

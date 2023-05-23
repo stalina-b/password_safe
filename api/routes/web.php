@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('routes', function() {
+    $routeCollection = Route::getRoutes();
+    foreach ($routeCollection as $value) {
+        echo "Route: ";
+        echo $value->uri();
+        echo "<br/>";
+    }
 });

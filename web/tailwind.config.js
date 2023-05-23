@@ -13,7 +13,6 @@ export default {
         primary: '#BB86FC',
         white: '#FFFFFF',
         succes: '#5CB85C'
-
       }
     },
   },

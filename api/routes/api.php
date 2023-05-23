@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\PasswordItemController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/passwords', [PasswordController::class, 'index']);
-Route::post('/passwords', [PasswordController::class, 'store']);
+Route::get('/passwords', [PasswordItemController::class, 'index']);
+Route::post('/passwords', [PasswordItemController::class, 'store']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

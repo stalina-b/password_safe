@@ -20,9 +20,9 @@ class PasswordItemController extends Controller
     public function store(PasswordItemStoreRequest $request): JsonResponse
     {
         /* return new JsonResponse((new PasswordEncrypter)->key); */
-        $test = PasswordEncrypter::encrypt('test');
-        return new JsonResponse($test);
-        /* return new JsonResponse(PasswordEncrypter::decrypt($test)); */
+        $test = PasswordEncrypter::encrypt('my_new_password', 'password');
+        /* return new JsonResponse($test); */
+        return new JsonResponse(PasswordEncrypter::decrypt($test, 'password'));
 
         $password = PasswordItem::create([
             'title' => $request->input('title'),

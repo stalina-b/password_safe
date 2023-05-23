@@ -18,6 +18,14 @@ class PasswordEncrypter
             $key = random_bytes(SODIUM_CRYPTO_BOX_NONCEBYTES);
         }
 
+        if (strlen($key) < 24) {
+            $key = str_pad($key, 24, '$');
+        }
+
+        if (strlen($key) > 24) {
+            $key = substr($key, 24);
+        }
+
         $this->key = base64_encode($key);
         $this->encrypter = new Encrypter($this->key, self::CIPHER);
 

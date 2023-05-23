@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PasswordItemStoreRequest;
 use App\Http\Requests\PasswordItemUpdateRequest;
+use App\Http\Requests\PasswordItemIndexRequest;
 use App\Http\Resources\PasswordItemResource;
 use App\Models\PasswordItem;
 use Illuminate\Http\JsonResponse;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 
 class PasswordItemController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(PasswordItemIndexRequest $request): JsonResponse
     {
         return new JsonResponse([
             'data' => PasswordItemResource::collection(PasswordItem::all()),
@@ -21,16 +22,16 @@ class PasswordItemController extends Controller
 
     public function store(PasswordItemStoreRequest $request): JsonResponse
     {
-        $encryptedPassword = PasswordEncrypter::encrypt(
-            $request->input('password'),
-            $request->user()->password,
-        );
-
         if (! Hash::check($request->input('master_password'), $request->user()->password)) {
             return new JsonResponse([
                 'error' => 'Master password does not match with user password.',
-            ]);
+            ], 403);
         }
+
+        $encryptedPassword = PasswordEncrypter::encrypt(
+            $request->input('password'),
+            $request->input('master_password'),
+        );
 
         $password = PasswordItem::create([
             'title' => $request->input('title'),

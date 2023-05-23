@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
-class PasswordItemStoreRequest extends FormRequest
+class PasswordItemUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,16 +23,12 @@ class PasswordItemStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|min:1|max:255',
-            'password' => [
-                'required',
-                'confirmed',
-                Password::min(12)
-                    ->mixedCase()
-                    ->numbers()
-                    ->symbols()
-                    ->uncompromised(),
-            ],
+            'title' => 'string|min:1|max:255',
+            'password' => Password::min(12)
+                ->mixedCase()
+                ->numbers()
+                ->symbols()
+                ->uncompromised(),
         ];
     }
 }

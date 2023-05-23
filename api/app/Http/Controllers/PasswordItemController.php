@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PasswordRequest;
+use App\Http\Requests\PasswordItemStoreRequest;
+use App\Http\Requests\PasswordItemUpdateRequest;
 use App\Http\Resources\PasswordItemResource;
 use App\Models\PasswordItem;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Domain\Password\PasswordEncrypter;
 
 class PasswordItemController extends Controller
 {
@@ -15,8 +17,13 @@ class PasswordItemController extends Controller
         return PasswordItemResource::collection(PasswordItem::all());
     }
 
-    public function store(PasswordRequest $request): PasswordItemResource
+    public function store(PasswordItemStoreRequest $request): JsonResponse
     {
+        /* return new JsonResponse((new PasswordEncrypter)->key); */
+        $test = PasswordEncrypter::encrypt('test');
+        return new JsonResponse($test);
+        /* return new JsonResponse(PasswordEncrypter::decrypt($test)); */
+
         $password = PasswordItem::create([
             'title' => $request->input('title'),
             'password' => $request->input('password'),
@@ -25,27 +32,23 @@ class PasswordItemController extends Controller
         return PasswordItemResource::make($password);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(PasswordItem $passwordItem): PasswordItemResource
     {
-        //
+        return PasswordItemResource::make($passwordItem);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(PasswordItemUpdateRequest $request, PasswordItem $passwordItem): PasswordItemResource
     {
-        //
+        $passwordItem->update([
+            'title' => $request->input('title'),
+            'password' => $request->input('password'),
+        ]);
+
+        return PasswordItemResource::make($passwordItem);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(PasswordItem $passwordItem): bool
     {
-        //
+        return $passwordItem->delete();
     }
 }

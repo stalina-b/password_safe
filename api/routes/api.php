@@ -16,7 +16,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/passwords', [PasswordItemController::class, 'index']);
+Route::get('/passwords/{passwordItem}', [PasswordItemController::class, 'show']);
 Route::post('/passwords', [PasswordItemController::class, 'store']);
+Route::put('/passwords/{passwordItem}', [PasswordItemController::class, 'update']);
+Route::delete('/passwords/{passwordItem}', [PasswordItemController::class, 'delete']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

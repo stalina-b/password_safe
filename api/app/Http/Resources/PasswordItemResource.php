@@ -2,16 +2,16 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Password;
+use App\Models\PasswordItem;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PasswordResource extends JsonResource
+class PasswordItemResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @mixin Password
+     * @mixin PasswordItem
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('passwords', function (Blueprint $table) {
+        Schema::create('password_items', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->string('title');

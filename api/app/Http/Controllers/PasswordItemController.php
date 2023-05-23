@@ -3,26 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PasswordRequest;
-use App\Http\Resources\PasswordResource;
-use App\Models\Password;
+use App\Http\Resources\PasswordItemResource;
+use App\Models\PasswordItem;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class PasswordController extends Controller
+class PasswordItemController extends Controller
 {
     public function index(): AnonymousResourceCollection
     {
-        return PasswordResource::collection(Password::all());
+        return PasswordItemResource::collection(PasswordItem::all());
     }
 
-    public function store(PasswordRequest $request): PasswordResource
+    public function store(PasswordRequest $request): PasswordItemResource
     {
-        $password = Password::create([
+        $password = PasswordItem::create([
             'title' => $request->input('title'),
             'password' => $request->input('password'),
         ]);
 
-        return PasswordResource::make($password);
+        return PasswordItemResource::make($password);
     }
 
     /**

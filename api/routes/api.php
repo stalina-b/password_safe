@@ -21,6 +21,8 @@ Route::get('/passwords/{passwordItem}', [PasswordItemController::class, 'show'])
 Route::post('/passwords', [PasswordItemController::class, 'store']);
 Route::put('/passwords/{passwordItem}', [PasswordItemController::class, 'update']);
 Route::delete('/passwords/{passwordItem}', [PasswordItemController::class, 'delete']);
+Route::post('/passwords/getScore', [PasswordItemController::class, 'getScore']);
+route::get('/passwords/{passwordItem}/score', [PasswordItemController::class, 'validationScore']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

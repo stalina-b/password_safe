@@ -9,7 +9,6 @@ use Illuminate\Encryption\Encrypter;
 class PasswordEncrypter
 {
     protected Encrypter $encrypter;
-    public string $key;
     const CIPHER = 'AES-256-CBC';
 
     public function __construct(?string $key = null)
@@ -23,11 +22,12 @@ class PasswordEncrypter
         }
 
         if (strlen($key) > 24) {
-            $key = substr($key, 24);
+            $key = substr($key, 0, 24);
         }
 
-        $this->key = base64_encode($key);
-        $this->encrypter = new Encrypter($this->key, self::CIPHER);
+
+        $key = base64_encode($key);
+        $this->encrypter = new Encrypter($key, self::CIPHER);
 
         return $this;
     }

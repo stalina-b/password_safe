@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PasswordItemController;
 use App\Http\Controllers\Api\AuthController;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,5 +32,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::get('/login', function () {
-    return json_encode(["message" => "Please login to continue"]);
+    return new JsonResponse(["message" => "Please login to continue"]);
 })->name('login');

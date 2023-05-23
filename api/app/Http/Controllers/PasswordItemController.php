@@ -7,48 +7,65 @@ use App\Http\Requests\PasswordItemUpdateRequest;
 use App\Http\Resources\PasswordItemResource;
 use App\Models\PasswordItem;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Domain\Password\PasswordEncrypter;
+use Illuminate\Support\Facades\Hash;
 
 class PasswordItemController extends Controller
 {
-    public function index(): AnonymousResourceCollection
+    public function index(): JsonResponse
     {
-        return PasswordItemResource::collection(PasswordItem::all());
+        return new JsonResponse([
+            'data' => PasswordItemResource::collection(PasswordItem::all()),
+        ]);
     }
 
     public function store(PasswordItemStoreRequest $request): JsonResponse
     {
-        /* return new JsonResponse((new PasswordEncrypter)->key); */
-        $test = PasswordEncrypter::encrypt('my_new_password', 'password');
-        /* return new JsonResponse($test); */
-        return new JsonResponse(PasswordEncrypter::decrypt($test, 'password'));
+        $encryptedPassword = PasswordEncrypter::encrypt(
+            $request->input('password'),
+            $request->user()->password,
+        );
+
+        if (! Hash::check($request->input('master_password'), $request->user()->password)) {
+            return new JsonResponse([
+                'error' => 'Master password does not match with user password.',
+            ]);
+        }
 
         $password = PasswordItem::create([
             'title' => $request->input('title'),
-            'password' => $request->input('password'),
+            'user_id' => $request->user()->id,
+            'password' => $encryptedPassword,
         ]);
 
-        return PasswordItemResource::make($password);
+        return new JsonResponse([
+            'data' => PasswordItemResource::make($password),
+        ]);
     }
 
-    public function show(PasswordItem $passwordItem): PasswordItemResource
+    public function show(PasswordItem $passwordItem): JsonResponse
     {
-        return PasswordItemResource::make($passwordItem);
+        return new JsonResponse([
+            'data' => PasswordItemResource::make($passwordItem),
+        ]);
     }
 
-    public function update(PasswordItemUpdateRequest $request, PasswordItem $passwordItem): PasswordItemResource
+    public function update(PasswordItemUpdateRequest $request, PasswordItem $passwordItem): JsonResponse
     {
         $passwordItem->update([
             'title' => $request->input('title'),
             'password' => $request->input('password'),
         ]);
 
-        return PasswordItemResource::make($passwordItem);
+        return new JsonResponse([
+            'data' => PasswordItemResource::make($passwordItem),
+        ]);
     }
 
-    public function destroy(PasswordItem $passwordItem): bool
+    public function destroy(PasswordItem $passwordItem): JsonResponse
     {
-        return $passwordItem->delete();
+        return new JsonResponse([
+            'data' => $passwordItem->delete(),
+        ]);
     }
 }

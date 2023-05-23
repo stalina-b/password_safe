@@ -59,4 +59,4 @@ function SidebarCaterogies() {
   );
 }
 
-export default SideBarCaterogies;
+export default SidebarCaterogies;

@@ -10,6 +10,8 @@ export default {
       error: '#DF5E78',
       secondary: '#03DAC6',
       primary: '#BB86FC',
+      white: '#FFFFFF',
+      succes: '#5CB85C'
 
     },
     extend: {

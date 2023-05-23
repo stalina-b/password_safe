@@ -29,7 +29,7 @@ class AuthController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'validation error',
-                    'errors' => $validateUser->errors()
+                    'errors' => $validateUser->errors()->first()
                 ], 401);
             }
 
@@ -73,14 +73,14 @@ class AuthController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'validation error',
-                    'errors' => $validateUser->errors()
+                    'errors' => $validateUser->errors()->first()
                 ], 401);
             }
 
             if(!Auth::attempt($request->only(['email', 'password']))){
                 return response()->json([
                     'status' => false,
-                    'message' => 'Email & Password does not match with our record.',
+                    'errors' => 'Email & Password does not match with our record.',
                 ], 401);
             }
 

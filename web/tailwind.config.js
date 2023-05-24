@@ -5,11 +5,11 @@ export default {
   ],
   theme: {
     colors: {
-      background: '#121212',
+      background: '#292929',
       surface: '#292929',
       error: '#DF5E78',
       secondary: '#03DAC6',
-      primary: '#BB86FC',
+      primary: '#544FE1',
       white: '#FFFFFF',
       succes: '#5CB85C'
 

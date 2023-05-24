@@ -3,7 +3,7 @@ import { faGear } from '@fortawesome/free-solid-svg-icons';
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-function SidebarCategories() {
+function SidebarCaterogies() {
   const Endpoint = "https://jsonplaceholder.typicode.com/users";
   const [userData, setUserData] = useState([]);
   const getUserData = async () => {
@@ -59,4 +59,4 @@ function SidebarCategories() {
   );
 }
 
-export default SidebarCategories;
+export default SidebarCaterogies;

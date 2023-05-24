@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Enums\UserRoleEnum;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -36,7 +37,7 @@ class AuthController extends Controller
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                /* 'role' => 0, */
+                'role' => UserRoleEnum::USER,
                 'password' => Hash::make($request->password)
             ]);
             // find the user

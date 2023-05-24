@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Categories\categoryController;
+use App\Http\Controllers\PasswordItemController;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,12 +25,20 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::get('/login', function () {
-    return json_encode(["message" => "Please login to continue"]);
+    return new JsonResponse(["message" => "Please login to continue"]);
 })->name('login');
 
 Route::middleware('auth:sanctum')->group(function() {
+    // Categories
     Route::post('/category', [categoryController::class, 'newCategory']);
     Route::get('/category', [categoryController::class, 'index']);
     Route::delete('/category/{id}', [categoryController::class, 'delete']);
     Route::put('/category/{id}', [categoryController::class, 'update']);
+
+    // PasswordItems
+    Route::get('/passwords', [PasswordItemController::class, 'index']);
+    Route::get('/passwords/{passwordItem}', [PasswordItemController::class, 'show']);
+    Route::post('/passwords', [PasswordItemController::class, 'store']);
+    Route::put('/passwords/{passwordItem}', [PasswordItemController::class, 'update']);
+    Route::delete('/passwords/{passwordItem}', [PasswordItemController::class, 'delete']);
 });

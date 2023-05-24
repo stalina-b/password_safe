@@ -1,8 +1,7 @@
 <?php
 
-use App\Http\Controllers\PasswordItemController;
 use App\Http\Controllers\Api\AuthController;
-use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Api\Categories\categoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,14 +16,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->group(function() {
-    Route::get('/passwords', [PasswordItemController::class, 'index']);
-    Route::get('/passwords/{passwordItem}', [PasswordItemController::class, 'show']);
-    Route::post('/passwords', [PasswordItemController::class, 'store']);
-    Route::put('/passwords/{passwordItem}', [PasswordItemController::class, 'update']);
-    Route::delete('/passwords/{passwordItem}', [PasswordItemController::class, 'delete']);
-});
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -32,5 +23,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::get('/login', function () {
-    return new JsonResponse(["message" => "Please login to continue"]);
+    return json_encode(["message" => "Please login to continue"]);
 })->name('login');
+
+Route::middleware('auth:sanctum')->group(function() {
+    Route::post('/category', [categoryController::class, 'newCategory']);
+    Route::get('/category', [categoryController::class, 'index']);
+    Route::delete('/category/{id}', [categoryController::class, 'delete']);
+    Route::put('/category/{id}', [categoryController::class, 'update']);
+});

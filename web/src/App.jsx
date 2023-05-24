@@ -1,8 +1,10 @@
+// import React from 'react';
 import './App.css';
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import {BrowserRouter, Routes, Route, Link} from 'react-router-dom';
 import Login  from "./components/authflow/Login";
 import Register from "./components/authflow/Register.jsx";
 
+  
 function App() {
   return (
     <BrowserRouter>
@@ -11,6 +13,7 @@ function App() {
             <Route path="/register" element={<Register/>}/>
         </Routes>
     </BrowserRouter>
+
   );
 }
   

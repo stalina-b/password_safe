@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Categories\categoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,3 +25,10 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 Route::get('/login', function () {
     return json_encode(["message" => "Please login to continue"]);
 })->name('login');
+
+Route::middleware('auth:sanctum')->group(function() {
+    Route::post('/category', [categoryController::class, 'newCategory']);
+    Route::get('/category', [categoryController::class, 'index']);
+    Route::delete('/category/{id}', [categoryController::class, 'delete']);
+    Route::put('/category/{id}', [categoryController::class, 'update']);
+});

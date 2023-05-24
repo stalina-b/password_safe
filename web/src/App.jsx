@@ -1,13 +1,16 @@
-import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import SidebarCategories from './components/Sidebar/Sidebar';
-  
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import Login  from "./components/authflow/Login";
+import Register from "./components/authflow/Register.jsx";
+
 function App() {
   return (
-    <Router>
-      <SidebarCategories />
-    </Router>
+    <BrowserRouter>
+        <Routes>
+            <Route path="/login" element={<Login/>}/>
+            <Route path="/register" element={<Register/>}/>
+        </Routes>
+    </BrowserRouter>
   );
 }
   

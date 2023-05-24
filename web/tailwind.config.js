@@ -4,17 +4,16 @@ export default {
     './src/components/**/*.{html,js,jsx}',
   ],
   theme: {
-    colors: {
-      background: '#121212',
-      surface: '#292929',
-      error: '#DF5E78',
-      secondary: '#03DAC6',
-      primary: '#BB86FC',
-      white: '#FFFFFF',
-      succes: '#5CB85C'
-
-    },
     extend: {
+      colors: {
+        background: '#121212',
+        surface: '#292929',
+        error: '#DF5E78',
+        secondary: '#03DAC6',
+        primary: '#BB86FC',
+        white: '#FFFFFF',
+        succes: '#5CB85C'
+      }
     },
   },
   plugins: [],

@@ -1,12 +1,14 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import SideBarCaterogies from './components/Sidebar/Sidebar';
+import SidebarCategories from './components/Sidebar/Sidebar';
+import Searchbar from './components/Searchbar/Searchbar';
   
 function App() {
   return (
     <Router>
-      <SideBarCaterogies />
+      <SidebarCategories />
+      <Searchbar />
     </Router>
   );
 }

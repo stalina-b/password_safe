@@ -10,6 +10,7 @@ use App\Http\Resources\PasswordItemResource;
 use App\Models\PasswordItem;
 use Illuminate\Http\JsonResponse;
 use Domain\Password\PasswordEncrypter;
+use Domain\Password\PasswordIdentical;
 use Illuminate\Support\Facades\Hash;
 
 class PasswordItemController extends Controller
@@ -31,6 +32,12 @@ class PasswordItemController extends Controller
             return new JsonResponse([
                 'error' => 'Master password does not match with user password.',
             ], 403);
+        }
+
+        if (PasswordIdentical::is($request->input('password'), $masterPassword)) {
+            return new JsonResponse([
+                'error' => 'Given password already exists. For security reasons, please pick another.',
+            ]);
         }
 
         $encryptedPassword = PasswordEncrypter::encrypt(

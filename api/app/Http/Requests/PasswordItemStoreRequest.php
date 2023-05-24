@@ -27,10 +27,7 @@ class PasswordItemStoreRequest extends FormRequest
             'master_password' => 'required|string|max:255',
             'password' => [
                 'required',
-                Password::min(12)
-                    ->mixedCase()
-                    ->numbers()
-                    ->symbols()
+                Password::min(6)
                     ->uncompromised(),
             ],
         ];

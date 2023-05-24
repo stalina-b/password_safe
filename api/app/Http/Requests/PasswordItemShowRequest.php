@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PasswordItemIndexRequest extends FormRequest
+class PasswordItemShowRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,7 @@ class PasswordItemIndexRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'perPage' => 'int|min:1',
-            'page' => 'int|min:1',
+            'master_password' => 'required|string|min:1|max:255',
         ];
     }
 }

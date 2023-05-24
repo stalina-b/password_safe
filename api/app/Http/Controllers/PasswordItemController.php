@@ -35,7 +35,7 @@ class PasswordItemController extends Controller
 
         $encryptedPassword = PasswordEncrypter::encrypt(
             $request->input('password'),
-            $request->input('master_password'),
+            $masterPassword,
         );
 
         $password = PasswordItem::create([

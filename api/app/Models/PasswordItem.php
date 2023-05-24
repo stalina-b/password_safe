@@ -21,16 +21,12 @@ class PasswordItem extends Model
         'user_id',
     ];
 
+    protected $hidden = [
+        'password',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function decrypt(): string
-    {
-        return PasswordEncrypter::decrypt(
-            $this->password,
-            Auth()->user()->password,
-        );
     }
 }

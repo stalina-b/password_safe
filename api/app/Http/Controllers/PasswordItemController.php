@@ -29,18 +29,6 @@ class PasswordItemController extends Controller
     {
         $masterPassword = base64_decode($request->input('master_password'));
 
-        if (! Hash::check($masterPassword, $request->user()->password)) {
-            return new JsonResponse([
-                'error' => 'Master password does not match with user password.',
-            ], 403);
-        }
-
-        if (PasswordIdentical::is($request->input('password'), $masterPassword)) {
-            return new JsonResponse([
-                'error' => 'Given password already exists. For security reasons, please pick another.',
-            ], 422);
-        }
-
         $encryptedPassword = PasswordEncrypter::encrypt(
             $request->input('password'),
             $masterPassword,
@@ -62,12 +50,6 @@ class PasswordItemController extends Controller
     {
         $masterPassword = base64_decode($request->input('master_password'));
 
-        if (! Hash::check($masterPassword, $request->user()->password)) {
-            return new JsonResponse([
-                'error' => 'Master password does not match with user password.',
-            ], 422);
-        }
-
         $passwordItemResource = PasswordItemResource::make($passwordItem);
         $passwordItemResource['password'] = PasswordEncrypter::decrypt($passwordItem->password, $masterPassword);
 
@@ -79,18 +61,6 @@ class PasswordItemController extends Controller
     public function update(PasswordItemUpdateRequest $request, PasswordItem $passwordItem): JsonResponse
     {
         $masterPassword = base64_decode($request->input('master_password'));
-
-        if (! Hash::check($masterPassword, $request->user()->password)) {
-            return new JsonResponse([
-                'error' => 'Master password does not match with user password.',
-            ], 422);
-        }
-
-        if (PasswordIdentical::is($request->input('password'), $masterPassword)) {
-            return new JsonResponse([
-                'error' => 'Given password already exists. For security reasons, please pick another.',
-            ], 422);
-        }
 
         $encryptedPassword = PasswordEncrypter::encrypt(
             $request->input('password'),

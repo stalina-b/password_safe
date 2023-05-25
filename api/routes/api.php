@@ -63,5 +63,5 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('/security/check', [SecurityCheckController::class, 'checkAllPasswords']);
 
     // Filter 
-    route::get('/filters', [FilterController::class, 'filter']);
+    Route::get('/filters', [FilterController::class, 'filter']);
 });

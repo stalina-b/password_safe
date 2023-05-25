@@ -8,6 +8,7 @@ use App\Http\Requests\PasswordItemShowRequest;
 use App\Http\Requests\PasswordItemIndexRequest;
 use App\Http\Resources\PasswordItemResource;
 use App\Models\PasswordItem;
+use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Domain\Password\PasswordEncrypter;
 use Illuminate\Support\Facades\Hash;
@@ -41,6 +42,7 @@ class PasswordItemController extends Controller
         $password = PasswordItem::create([
             'title' => $request->input('title'),
             'user_id' => $request->user()->id,
+            'category_id' => $request->input('category_id'),
             'password' => $encryptedPassword,
         ]);
 
@@ -72,6 +74,7 @@ class PasswordItemController extends Controller
         $passwordItem->update([
             'title' => $request->input('title'),
             'password' => $request->input('password'),
+            'category_id' => $request->input('category_id'),
         ]);
 
         return new JsonResponse([

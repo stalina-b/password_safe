@@ -24,6 +24,7 @@ class PasswordItemUpdateRequest extends FormRequest
     {
         return [
             'title' => 'string|min:1|max:255',
+            'category_id' => 'integer|exists:categories,id',
             'password' => Password::min(12)
                 ->mixedCase()
                 ->numbers()

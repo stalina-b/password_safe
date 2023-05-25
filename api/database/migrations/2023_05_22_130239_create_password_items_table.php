@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->string('title');
             $table->string('password');
+            $table->foreignID('category_id')->nullable()->constrained('categories')->onUpdate('cascade')->nullOnDelete();
             $table->string('username')->nullable();
             $table->mediumText('note')->nullable();
         });

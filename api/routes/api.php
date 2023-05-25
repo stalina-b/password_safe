@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Categories\categoryController;
 use App\Http\Controllers\PasswordItemController;
+use App\Http\Controllers\Securuity\SecurityCheckController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -41,4 +42,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('/passwords', [PasswordItemController::class, 'store']);
     Route::put('/passwords/{passwordItem}', [PasswordItemController::class, 'update']);
     Route::delete('/passwords/{passwordItem}', [PasswordItemController::class, 'delete']);
+
+    //Security check
+    Route::post('/security/check', [SecurityCheckController::class, 'checkAllPasswords']);
 });

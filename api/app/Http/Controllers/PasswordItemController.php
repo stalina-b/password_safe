@@ -19,7 +19,7 @@ class PasswordItemController extends Controller
     {
 
         return new JsonResponse([
-            'data' => PasswordItem::paginate(
+            'data' => $request->user()->passwordItems()->paginate(
                 $perPage = $request->input('perPage') ?? 15,
             ),
         ]);
@@ -47,8 +47,9 @@ class PasswordItemController extends Controller
         );
 
         $password = PasswordItem::create([
-            'title' => $request->input('title'),
             'user_id' => $request->user()->id,
+            'title' => $request->input('title'),
+            'username' => $request->input('username'),
             'password' => $encryptedPassword,
         ]);
 
@@ -64,7 +65,7 @@ class PasswordItemController extends Controller
         if (! Hash::check($masterPassword, $request->user()->password)) {
             return new JsonResponse([
                 'error' => 'Master password does not match with user password.',
-            ], 403);
+            ], 422);
         }
 
         $passwordItemResource = PasswordItemResource::make($passwordItem);
@@ -77,9 +78,28 @@ class PasswordItemController extends Controller
 
     public function update(PasswordItemUpdateRequest $request, PasswordItem $passwordItem): JsonResponse
     {
+        $masterPassword = base64_decode($request->input('master_password'));
+
+        if (! Hash::check($masterPassword, $request->user()->password)) {
+            return new JsonResponse([
+                'error' => 'Master password does not match with user password.',
+            ], 422);
+        }
+
+        if (PasswordIdentical::is($request->input('password'), $masterPassword)) {
+            return new JsonResponse([
+                'error' => 'Given password already exists. For security reasons, please pick another.',
+            ], 422);
+        }
+
+        $encryptedPassword = PasswordEncrypter::encrypt(
+            $request->input('password'),
+            $masterPassword,
+        );
         $passwordItem->update([
             'title' => $request->input('title'),
-            'password' => $request->input('password'),
+            'username' => $request->input('username'),
+            'password' => $encryptedPassword,
         ]);
 
         return new JsonResponse([

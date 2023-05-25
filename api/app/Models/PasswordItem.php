@@ -16,7 +16,7 @@ class PasswordItem extends Model
     protected $fillable = [
         'title',
         'password',
-        'e-mail',
+        'username',
         'note',
         'user_id',
     ];

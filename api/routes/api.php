@@ -41,7 +41,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/passwords/{passwordItem}', [PasswordItemController::class, 'show']);
     Route::post('/passwords', [PasswordItemController::class, 'store']);
     Route::put('/passwords/{passwordItem}', [PasswordItemController::class, 'update']);
-    Route::delete('/passwords/{passwordItem}', [PasswordItemController::class, 'delete']);
+    Route::delete('/passwords/{passwordItem}', [PasswordItemController::class, 'destroy']);
 
     //Security check
     Route::post('/security/check', [SecurityCheckController::class, 'checkAllPasswords']);

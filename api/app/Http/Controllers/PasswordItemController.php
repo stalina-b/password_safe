@@ -37,7 +37,7 @@ class PasswordItemController extends Controller
         if (PasswordIdentical::is($request->input('password'), $masterPassword)) {
             return new JsonResponse([
                 'error' => 'Given password already exists. For security reasons, please pick another.',
-            ]);
+            ], 422);
         }
 
         $encryptedPassword = PasswordEncrypter::encrypt(

@@ -21,7 +21,6 @@ class FilterRequest extends FormRequest
      */
     public function rules(): array
     {
-        
             return [
                 'search' => 'string|min:3|max:255',
                 'orderBy' => 'string|in:title,username',

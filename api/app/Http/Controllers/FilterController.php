@@ -14,7 +14,6 @@ class FilterController extends Controller
 {
     public function filter(FilterRequest $request)
     {
-
         $passwords = PasswordItem::where('title', 'like', '%' . $request->input('search') . '%')
             ->orWhere('username', 'like', '%' . $request->input('search') . '%')
             ->orderBy($request->input('orderBy') ?? 'title', $request->boolean('desc') ? 'desc' : 'asc')

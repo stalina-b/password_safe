@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\CategoryResource;
 use App\Models\PasswordItem;
 use Illuminate\Http\JsonResponse;
-use PgSql\Lob;
 
 class categoryController extends Controller
 {

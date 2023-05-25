@@ -18,7 +18,6 @@ class PasswordItemController extends Controller
 {
     public function index(PasswordItemIndexRequest $request): JsonResponse
     {
-
         return new JsonResponse([
             'data' => PasswordItemResource::collection($request->user()->passwordItems),
         ]);

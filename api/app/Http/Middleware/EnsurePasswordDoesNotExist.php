@@ -18,16 +18,17 @@ class EnsurePasswordDoesNotExist
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if ($request->has('password') === false) {
+            return $next($request);
+        }
+
         $request->validate([
-            'password' => [
-                'required',
-                Password::min(6)
-                    ->mixedCase()
-                    ->numbers()
-                    ->symbols()
-                    ->letters()
-                    ->uncompromised(),
-            ],
+            'password' => Password::min(6)
+                ->mixedCase()
+                ->numbers()
+                ->symbols()
+                ->letters()
+                ->uncompromised(),
         ]);
 
         $masterPassword = base64_decode($request->input('master_password'));

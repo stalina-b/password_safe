@@ -63,17 +63,21 @@ class PasswordItemController extends Controller
 
     public function update(PasswordItemUpdateRequest $request, PasswordItem $passwordItem): JsonResponse
     {
-        $masterPassword = base64_decode($request->input('master_password'));
+        if ($request->has(['password', 'master_password'])) {
+            $masterPassword = base64_decode($request->input('master_password'));
 
-        $encryptedPassword = PasswordEncrypter::encrypt(
-            $request->input('password'),
-            $masterPassword,
-        );
+            $encryptedPassword = PasswordEncrypter::encrypt(
+                $request->input('password'),
+                $masterPassword,
+            );
+        }
+
         $passwordItem->update([
-            'title' => $request->input('title'),
-            'username' => $request->input('username'),
-            'note' => $request->input('note'),
-            'password' => $encryptedPassword,
+            'title' => $request->input('title') ?? $passwordItem->title,
+            'username' => $request->input('username') ?? $passwordItem->username,
+            'note' => $request->input('note') ?? $passwordItem->note,
+            'password' => $encryptedPassword ?? $passwordItem->password,
+            'category_id' => $request->input('category_id') ?? $passwordItem->category_id,
         ]);
 
         return new JsonResponse([

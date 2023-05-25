@@ -38,6 +38,7 @@ class PasswordItemController extends Controller
             'user_id' => $request->user()->id,
             'title' => $request->input('title'),
             'username' => $request->input('username'),
+            'note' => $request->input('note'),
             'password' => $encryptedPassword,
         ]);
 
@@ -69,6 +70,7 @@ class PasswordItemController extends Controller
         $passwordItem->update([
             'title' => $request->input('title'),
             'username' => $request->input('username'),
+            'note' => $request->input('note'),
             'password' => $encryptedPassword,
         ]);
 

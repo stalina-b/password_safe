@@ -24,6 +24,7 @@ class PasswordItemUpdateRequest extends FormRequest
     {
         return [
             'title' => 'string|min:1|max:255',
+            'username' => 'string|min:1|max:255',
             'password' => Password::min(6)
                 ->mixedCase()
                 ->numbers()

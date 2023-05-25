@@ -8,14 +8,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\CategoryResource;
+use App\Models\PasswordItem;
+use Illuminate\Http\JsonResponse;
+use PgSql\Lob;
 
 class categoryController extends Controller
 {
     public function newCategory(Request $request)
     {
         $request->validate([
-
-                'name' => 'required',
+            'name' => 'required',
         ]);
 
         // get user email

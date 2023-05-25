@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Categories\categoryController;
+use App\Http\Controllers\FilterController;
 use App\Http\Controllers\PasswordItemController;
 use App\Http\Controllers\Securuity\SecurityCheckController;
 use App\Http\Middleware\EnsureMasterPasswordIsValid;
@@ -60,4 +61,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     //Security check
     Route::post('/security/check', [SecurityCheckController::class, 'checkAllPasswords']);
+
+    // Filter 
+    route::get('/filters', [FilterController::class, 'filter']);
 });

@@ -9,10 +9,10 @@ function Passwords() {
   useEffect(() => {
     const fetchPasswords = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/passwords", {
+        const response = await axios.get(import.meta.env.VITE_API_URL + "/passwords", {
           headers: {
             Accept: "application/json",
-            Authorization: "Bearer 3|orSLXhlR61KjVL1KQwMnUD2vIhFWLKWobvLRCgEy",
+            Authorization: "Bearer " + localStorage.getItem("token"),
             "Content-Type": "application/json",
           },
         });

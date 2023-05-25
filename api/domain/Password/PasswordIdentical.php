@@ -12,6 +12,7 @@ class PasswordIdentical
 {
     public static function is(string $password, string $masterPassword): bool
     {
+        // Checks for identical passwords within our database.
         return !Auth::user()->passwordItems()->each(function(PasswordItem $passwordItem) use ($password, $masterPassword) {
             $decryptedPassword = '';
 

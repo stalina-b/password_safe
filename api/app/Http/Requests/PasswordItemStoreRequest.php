@@ -27,6 +27,7 @@ class PasswordItemStoreRequest extends FormRequest
             'username' => 'required|string|min:1|max:255',
             'note' => 'string|min:1',
             'master_password' => 'required|string|max:255',
+            'category_id' => 'required|integer|exists:categories,id',
             'password' => [
                 'required',
                 Password::min(6)

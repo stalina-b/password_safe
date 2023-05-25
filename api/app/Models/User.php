@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\category;
 
 class User extends Authenticatable
 {
@@ -47,6 +48,11 @@ class User extends Authenticatable
         'role' => UserRoleEnum::class
 
     ];
+
+    public function categories(): HasMany
+    {
+        return $this->HasMany(category::class);
+    }
 
     public function passwordItems(): HasMany
     {

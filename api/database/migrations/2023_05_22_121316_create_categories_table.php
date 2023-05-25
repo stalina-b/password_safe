@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id('id');
-            $table->string('email');
+            $table->foreignID('user_id')->constrained('users');
             $table->string('name', 100);
             $table->timestamps();
-            $table->foreign('email')->references('email')->on('users');
         });
     }
 

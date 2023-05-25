@@ -8,6 +8,7 @@ use App\Http\Requests\PasswordItemShowRequest;
 use App\Http\Requests\PasswordItemIndexRequest;
 use App\Http\Resources\PasswordItemResource;
 use App\Models\PasswordItem;
+use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Domain\Password\PasswordEncrypter;
 use Domain\Password\PasswordIdentical;
@@ -17,11 +18,8 @@ class PasswordItemController extends Controller
 {
     public function index(PasswordItemIndexRequest $request): JsonResponse
     {
-
         return new JsonResponse([
-            'data' => $request->user()->passwordItems()->paginate(
-                $perPage = $request->input('perPage') ?? 15,
-            ),
+            'data' => PasswordItemResource::collection($request->user()->passwordItems),
         ]);
     }
 
@@ -36,6 +34,7 @@ class PasswordItemController extends Controller
 
         $password = PasswordItem::create([
             'user_id' => $request->user()->id,
+            'category_id' => $request->input('category_id'),
             'title' => $request->input('title'),
             'username' => $request->input('username'),
             'note' => $request->input('note'),
@@ -61,17 +60,21 @@ class PasswordItemController extends Controller
 
     public function update(PasswordItemUpdateRequest $request, PasswordItem $passwordItem): JsonResponse
     {
-        $masterPassword = base64_decode($request->input('master_password'));
+        if ($request->has(['password', 'master_password'])) {
+            $masterPassword = base64_decode($request->input('master_password'));
 
-        $encryptedPassword = PasswordEncrypter::encrypt(
-            $request->input('password'),
-            $masterPassword,
-        );
+            $encryptedPassword = PasswordEncrypter::encrypt(
+                $request->input('password'),
+                $masterPassword,
+            );
+        }
+
         $passwordItem->update([
-            'title' => $request->input('title'),
-            'username' => $request->input('username'),
-            'note' => $request->input('note'),
-            'password' => $encryptedPassword,
+            'title' => $request->input('title') ?? $passwordItem->title,
+            'username' => $request->input('username') ?? $passwordItem->username,
+            'note' => $request->input('note') ?? $passwordItem->note,
+            'password' => $encryptedPassword ?? $passwordItem->password,
+            'category_id' => $request->input('category_id') ?? $passwordItem->category_id,
         ]);
 
         return new JsonResponse([

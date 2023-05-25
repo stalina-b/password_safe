@@ -17,8 +17,12 @@ class EnsureMasterPasswordIsValid
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if ($request->has('master_password') === false) {
+            return $next($request);
+        }
+
         $request->validate([
-            'master_password' => 'required|min:1|max:255',
+            'master_password' => 'min:1|max:255',
         ]);
 
         $masterPassword = base64_decode($request->input('master_password'));

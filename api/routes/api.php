@@ -27,17 +27,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/auth/register', [AuthController::class, 'register']);
-Route::post('/auth/login', [AuthController::class, 'login']);
+Route::post('/auth/login', [AuthController::class, 'logn']);
 Route::get('/login', function () {
     return new JsonResponse(["message" => "Please login to continue"]);
 })->name('login');
 
 Route::middleware('auth:sanctum')->group(function() {
     // Categories
-    Route::post('/category', [categoryController::class, 'newCategory']);
-    Route::get('/category', [categoryController::class, 'index']);
-    Route::delete('/category/{id}', [categoryController::class, 'delete']);
-    Route::put('/category/{id}', [categoryController::class, 'update']);
+    Route::post('/categories', [categoryController::class, 'newCategory']);
+    Route::get('/categories', [categoryController::class, 'index']);
+    route::get('/categories/{category}', [categoryController::class, 'show']);
+    Route::delete('/categories/{id}', [categoryController::class, 'delete']);
+    Route::put('/categories/{id}', [categoryController::class, 'update']);
 
     // PasswordItems
     Route::get('/passwords', [PasswordItemController::class, 'index']);

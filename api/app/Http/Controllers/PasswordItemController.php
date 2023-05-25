@@ -11,14 +11,16 @@ use App\Models\PasswordItem;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Domain\Password\PasswordEncrypter;
+use Domain\Password\PasswordIdentical;
 use Illuminate\Support\Facades\Hash;
 
 class PasswordItemController extends Controller
 {
     public function index(PasswordItemIndexRequest $request): JsonResponse
     {
+
         return new JsonResponse([
-            'data' => PasswordItem::paginate(
+            'data' => $request->user()->passwordItems()->paginate(
                 $perPage = $request->input('perPage') ?? 15,
             ),
         ]);
@@ -28,21 +30,17 @@ class PasswordItemController extends Controller
     {
         $masterPassword = base64_decode($request->input('master_password'));
 
-        if (! Hash::check($masterPassword, $request->user()->password)) {
-            return new JsonResponse([
-                'error' => 'Master password does not match with user password.',
-            ], 403);
-        }
-
         $encryptedPassword = PasswordEncrypter::encrypt(
             $request->input('password'),
-            $request->input('master_password'),
+            $masterPassword,
         );
 
         $password = PasswordItem::create([
-            'title' => $request->input('title'),
             'user_id' => $request->user()->id,
             'category_id' => $request->input('category_id'),
+            'title' => $request->input('title'),
+            'username' => $request->input('username'),
+            'note' => $request->input('note'),
             'password' => $encryptedPassword,
         ]);
 
@@ -55,12 +53,6 @@ class PasswordItemController extends Controller
     {
         $masterPassword = base64_decode($request->input('master_password'));
 
-        if (! Hash::check($masterPassword, $request->user()->password)) {
-            return new JsonResponse([
-                'error' => 'Master password does not match with user password.',
-            ], 403);
-        }
-
         $passwordItemResource = PasswordItemResource::make($passwordItem);
         $passwordItemResource['password'] = PasswordEncrypter::decrypt($passwordItem->password, $masterPassword);
 
@@ -71,10 +63,17 @@ class PasswordItemController extends Controller
 
     public function update(PasswordItemUpdateRequest $request, PasswordItem $passwordItem): JsonResponse
     {
+        $masterPassword = base64_decode($request->input('master_password'));
+
+        $encryptedPassword = PasswordEncrypter::encrypt(
+            $request->input('password'),
+            $masterPassword,
+        );
         $passwordItem->update([
             'title' => $request->input('title'),
-            'password' => $request->input('password'),
-            'category_id' => $request->input('category_id'),
+            'username' => $request->input('username'),
+            'note' => $request->input('note'),
+            'password' => $encryptedPassword,
         ]);
 
         return new JsonResponse([

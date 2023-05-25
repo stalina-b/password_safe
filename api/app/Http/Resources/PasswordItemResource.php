@@ -20,6 +20,7 @@ class PasswordItemResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'password' => $this->password,
+            'note' => $this->note,
             'user' => $this->user,
             'category' => $this->category,
             'created_at' => $this->created_at,

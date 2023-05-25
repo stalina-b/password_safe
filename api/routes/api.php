@@ -3,6 +3,10 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Categories\categoryController;
 use App\Http\Controllers\PasswordItemController;
+use App\Http\Controllers\Securuity\SecurityCheckController;
+use App\Http\Middleware\EnsureMasterPasswordIsValid;
+use App\Http\Middleware\EnsurePasswordDoesNotExist;
+use App\Http\Middleware\EnsureUnpaidUserHasNotHitPasswordLimit;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -38,8 +42,22 @@ Route::middleware('auth:sanctum')->group(function() {
 
     // PasswordItems
     Route::get('/passwords', [PasswordItemController::class, 'index']);
-    Route::get('/passwords/{passwordItem}', [PasswordItemController::class, 'show']);
-    Route::post('/passwords', [PasswordItemController::class, 'store']);
-    Route::put('/passwords/{passwordItem}', [PasswordItemController::class, 'update']);
+
+    Route::get('/passwords/{passwordItem}', [PasswordItemController::class, 'show'])
+        ->middleware(EnsureMasterPasswordIsValid::class);
+
+    Route::post('/passwords', [PasswordItemController::class, 'store'])
+        ->middleware(
+            EnsureUnpaidUserHasNotHitPasswordLimit::class,
+            EnsureMasterPasswordIsValid::class,
+            EnsurePasswordDoesNotExist::class,
+        );
+
+    Route::put('/passwords/{passwordItem}', [PasswordItemController::class, 'update'])
+        ->middleware(EnsureMasterPasswordIsValid::class, EnsurePasswordDoesNotExist::class);
+
     Route::delete('/passwords/{passwordItem}', [PasswordItemController::class, 'destroy']);
+
+    //Security check
+    Route::post('/security/check', [SecurityCheckController::class, 'checkAllPasswords']);
 });

@@ -20,9 +20,7 @@ class PasswordItemController extends Controller
     {
 
         return new JsonResponse([
-            'data' => $request->user()->passwordItems()->paginate(
-                $perPage = $request->input('perPage') ?? 15,
-            ),
+            'data' => PasswordItemResource::collection($request->user()->passwordItems),
         ]);
     }
 

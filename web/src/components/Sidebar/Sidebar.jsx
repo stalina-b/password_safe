@@ -11,10 +11,10 @@ function SidebarCategories() {
 
     const fetchData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/category', {
+        const response = await fetch(import.meta.env.VITE_API_URL + '/category', {
           method: 'GET',
           headers: {
-            'Authorization': 'Bearer 3|orSLXhlR61KjVL1KQwMnUD2vIhFWLKWobvLRCgEy',
+            'Authorization': "Bearer " + localStorage.getItem("token"),
             'Content-Type': 'application/json',
           },
         });

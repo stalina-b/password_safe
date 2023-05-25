@@ -7,7 +7,7 @@ function Users() {
     try {
       const fetchData = await axios.get(Endpoint, {
         headers: {
-          authorization: "Bearer JWT Token",
+          Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
       setUserData(fetchData.data);

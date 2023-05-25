@@ -31,6 +31,7 @@ class PasswordItemStoreRequest extends FormRequest
                     ->mixedCase()
                     ->numbers()
                     ->symbols()
+                    ->letters()
                     ->uncompromised(),
             ],
         ];

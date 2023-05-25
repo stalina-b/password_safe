@@ -17,6 +17,7 @@ class PasswordItemController extends Controller
 {
     public function index(PasswordItemIndexRequest $request): JsonResponse
     {
+
         return new JsonResponse([
             'data' => PasswordItem::paginate(
                 $perPage = $request->input('perPage') ?? 15,

@@ -147,9 +147,7 @@ function PasswordInspect({ setIsnewItem, Loading, password, isNewItem, categorie
 	const deletePassword = async (password) => {
 		try {
 			const response = await axios.delete(
-				import.meta.env.VITE_API_URL + `/passwords/${
-					password && password.id
-				}`,
+				import.meta.env.VITE_API_URL + `/passwords/${password}`,
 				{
 					headers: {
 						Accept: "application/json",

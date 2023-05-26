@@ -16,10 +16,8 @@
     "@headlessui/react": "^1.7.14",
     "@phosphor-icons/react": "^2.0.9",
     "axios": "^1.4.0",
-    "chart.js": "^4.3.0",
     "headlessui": "^0.0.0",
     "react": "^18.2.0",
-    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.11.2"
   },

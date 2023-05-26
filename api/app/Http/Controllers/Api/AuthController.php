@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Enums\UserRoleEnum;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\UpdateUserRequest;
 
 class AuthController extends Controller
 {
@@ -19,24 +21,26 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         try {
-            $validateUser = Validator::make($request->all(),
+            $validateUser = Validator::make(
+                $request->all(),
                 [
                     'name' => 'required',
                     'email' => 'required|email|unique:users,email',
                     'password' => 'required'
-                ]);
-            if($validateUser->fails()){
+                ]
+            );
+            if ($validateUser->fails()) {
                 return response()->json([
                     'status' => false,
                     'message' => 'validation error',
-                    'errors' => $validateUser->errors()
+                    'errors' => $validateUser->errors()->first()
                 ], 401);
             }
 
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'role' => 0,
+                'role' => UserRoleEnum::USER,
                 'password' => Hash::make($request->password)
             ]);
             // find the user
@@ -46,7 +50,6 @@ class AuthController extends Controller
                 'token' => $user->createToken("API TOKEN")->plainTextToken,
                 'user' => User::find($user->id),
             ], 200);
-
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -63,24 +66,26 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         try {
-            $validateUser = Validator::make($request->all(),
+            $validateUser = Validator::make(
+                $request->all(),
                 [
                     'email' => 'required|email',
                     'password' => 'required'
-                ]);
+                ]
+            );
 
-            if($validateUser->fails()){
+            if ($validateUser->fails()) {
                 return response()->json([
                     'status' => false,
                     'message' => 'validation error',
-                    'errors' => $validateUser->errors()
+                    'errors' => $validateUser->errors()->first()
                 ], 401);
             }
 
-            if(!Auth::attempt($request->only(['email', 'password']))){
+            if (!Auth::attempt($request->only(['email', 'password']))) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Email & Password does not match with our record.',
+                    'errors' => 'Email & Password does not match with our record.',
                 ], 401);
             }
 
@@ -92,7 +97,26 @@ class AuthController extends Controller
                 'token' => $user->createToken("API TOKEN")->plainTextToken,
                 'user' => $user,
             ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
 
+    // premium user upgrade
+    public function upgrade(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $user->role = UserRoleEnum::PREMIUM;
+            $user->save();
+            return response()->json([
+                'status' => true,
+                'message' => 'User Upgraded Successfully',
+                'user' => $user,
+            ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,

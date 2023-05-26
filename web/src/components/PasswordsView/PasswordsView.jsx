@@ -46,9 +46,6 @@ function Passwords() {
         setSelectedPassword(password);
     };
 
-    fetchPasswords();
-  }, []);
-
   return (
       <div className="row-span-9 col-span-12 bg-white rounded-lg shadow-2xl bg-opacity-20 backdrop-filter backdrop-blur-sm">
         <div className="flex flex-row h-full w-full">

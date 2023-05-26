@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/auth/register', [AuthController::class, 'register']);
-Route::post('/auth/login', [AuthController::class, 'logn']);
+Route::post('/auth/login', [AuthController::class, 'login']);
 Route::get('/login', function () {
     return new JsonResponse(["message" => "Please login to continue"]);
 })->name('login');

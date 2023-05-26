@@ -47,6 +47,7 @@ export const Login = () => {
             localStorage.setItem('name', responseData.user.name);
             localStorage.setItem('email', responseData.user.email);
             localStorage.setItem('role', responseData.user.role);
+            window.location.href = '/dashboard';
             setHidden('block bg-succes')
         } else {
             console.log(responseData.message);

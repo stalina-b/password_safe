@@ -24,7 +24,7 @@ class SecurityCheckController extends Controller
             $temp = PasswordEncrypter::decrypt($password->password, $masterPassword);
             $tempscore = (new \Domain\Password\PasswordScoreTester)->validationScore($temp);
             $pwned = (new \Domain\Password\PasswordScoreTester)->checkPassword($temp);
-            $scores[] = ['password' => $password->id, 'score' => $tempscore, 'pwned' => $pwned];
+            $scores[] = ['password' => $password->title, 'score' => $tempscore, 'pwned' => $pwned];
         }
         $hbip = (new \Domain\Password\PasswordScoreTester)->checkHaveibeenpwned($request->user()->email);
 

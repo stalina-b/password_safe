@@ -4,10 +4,8 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from "./components/authflow/Login";
 import Register from "./components/authflow/Register";
-import SidebarCategories from "./components/Sidebar/Sidebar";
-import Searchbar from "./components/Searchbar/Searchbar";
-import Passwords from "./components/PasswordsView/PasswordsView";
 import {Dashboard} from "./components/dashboard/Dashboard.jsx";
+import {Adminboard} from "./components/adminboard/Adminboard";
 
 function App() {
     return (
@@ -16,6 +14,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/dashboard/" element={<Dashboard />} />
+                <Route path="/adminboard/" element={<Adminboard/>} />
             </Routes>
         </BrowserRouter>
     );

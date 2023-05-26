@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::get('/login', function () {
-    return new JsonResponse(["message" => "Please login to continue"]);
+    return new JsonResponse(["message" => "Please login to continue"], 403);
 })->name('login');
 
 Route::middleware('auth:sanctum')->group(function() {
@@ -64,4 +64,11 @@ Route::middleware('auth:sanctum')->group(function() {
 
     // Filter 
     Route::get('/filters', [FilterController::class, 'filter']);
+
+    //User delete
+    Route::delete('/auth/delete', [AuthController::class, 'destroy'])
+        ->middleware(EnsureMasterPasswordIsValid::class);
+
+    //Logout
+    Route::post('/auth/logout', [AuthController::class, 'logout']);
 });

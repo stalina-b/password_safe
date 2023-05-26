@@ -28,14 +28,18 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+// user creation and login
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::get('/login', function () {
-    return json_encode(["message" => "Please login to continue"]);
+    return new JsonResponse(["message" => "Please login to continue"]);
 })->name('login');
 
-Route::middleware('auth:sanctum')->group(function () {
+
+Route::middleware('auth:sanctum')->group(function() {
+// Update user
+Route::put('/user', [AuthController::class, 'updateUser']);
+
     // Categories
     Route::post('/categories', [categoryController::class, 'newCategory']);
     Route::get('/categories', [categoryController::class, 'index']);
@@ -83,4 +87,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/admin/statistics/users', [AdminController::class, 'showUsers'])
         ->middleware(EnsureUserIsAdmin::class);
+  
+
 });

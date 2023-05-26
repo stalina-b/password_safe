@@ -106,29 +106,22 @@ class AuthController extends Controller
     }
 
     // premium user upgrade
-    public function updateUser(UpdateUserRequest $request)
+    public function upgrade(Request $request)
     {
-        $user = Auth::user();
-
-        // check if the user is already a premium user
-        if ($user->role === UserRoleEnum::PREMIUM) {
+        try {
+            $user = Auth::user();
+            $user->role = UserRoleEnum::PREMIUM;
+            $user->save();
+            return response()->json([
+                'status' => true,
+                'message' => 'User Upgraded Successfully',
+                'user' => $user,
+            ], 200);
+        } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'message' => 'User is already a premium user.',
-            ], 400);
+                'message' => $th->getMessage()
+            ], 500);
         }
-
-        $request->update([
-            'iban' => $request->input('iban'),
-            'address' => $request->input('address'),
-            'phone_number' => $request->input('phone_number'),
-            'role' => UserRoleEnum::PREMIUM,
-        ]);
-
-        return response()->json([
-            'status' => true,
-            'message' => 'You are now a premium user.',
-            'user' => $user,
-        ], 200);
     }
 }

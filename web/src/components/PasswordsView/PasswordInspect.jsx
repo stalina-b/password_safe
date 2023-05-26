@@ -1,9 +1,8 @@
 import {Copy, Eye, EyeSlash, Shuffle} from "@phosphor-icons/react";
-import React, { useState, useEffect } from "react";
-import axios from "axios";
 import MasterPasswordPopupModal from "../dashboard/MasterPasswordPopupModal.jsx";
 import GlassmorphicButton from "../Sidebar/CategoriesButton.jsx";
-
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 function generateSecurePassword(length) {
 	const characters =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
@@ -18,8 +17,7 @@ function generateSecurePassword(length) {
 }
 
 
-
-function PasswordInspect({setIsnewItem,Loading, password, isNewItem, categories }) {
+function PasswordInspect({ setIsnewItem, Loading, password, isNewItem, categories }) {
 	console.log(password);
 	const [showPassword, setShowPassword] = useState(false);
 	const [updatedPassword, setUpdatedPassword] = useState({});
@@ -32,6 +30,23 @@ function PasswordInspect({setIsnewItem,Loading, password, isNewItem, categories 
 		setGeneratedPassword(generatedPassword);
 		handleChange("password", generatedPassword);
 	};
+
+	// check if password is new empty object if so fill with dummy data
+	// if not empty object then fill with password data
+
+	useEffect(() => {
+		return () => {
+			password = {
+				id: 0,
+				title: "",
+				username: "",
+				note: "",
+				category_id: null,
+			};
+		};
+	}, [password]);
+
+
 
 	useEffect(() => {
 		setRevealedPassword("");
@@ -58,6 +73,7 @@ function PasswordInspect({setIsnewItem,Loading, password, isNewItem, categories 
 		const encodedPassword = btoa(password);
 		handleSave(encodedPassword);
 	};
+
 	const handleMasterPasswordShowSubmit = (password) => {
 		const encodedPassword = btoa(password);
 		fetchPassword(encodedPassword);
@@ -72,10 +88,10 @@ function PasswordInspect({setIsnewItem,Loading, password, isNewItem, categories 
 
 	const handleSave = async (encodedPassword) => {
 		try {
-			let apiUrl = "http://127.0.0.1:8000/api/passwords";
+			let apiUrl = import.meta.env.VITE_API_URL + "/passwords";
 			let httpMethod = "POST";
 
-			if (!isNewItem) {
+			if (!isNewItem && password) {
 				apiUrl += `/${password.id}`;
 				httpMethod = "PUT";
 			}
@@ -97,6 +113,7 @@ function PasswordInspect({setIsnewItem,Loading, password, isNewItem, categories 
 			if (response.status === 200) {
 				setUpdatedPassword({});
 				setIsnewItem(false);
+				window.location.reload();
 			}
 		} catch (error) {
 			alert("Item update failed! Reason: " + error.response.data.error);
@@ -104,13 +121,12 @@ function PasswordInspect({setIsnewItem,Loading, password, isNewItem, categories 
 		}
 	};
 
-
 	const fetchPassword = async (submittedMasterPassword) => {
 		try {
 			const response = await axios.get(
-				`http://127.0.0.1:8000/api/passwords/${
-					password.id
-				}?master_password=${(submittedMasterPassword)}`,
+				import.meta.env.VITE_API_URL + `/passwords/${
+					password && password.id
+				}?master_password=${submittedMasterPassword}`,
 				{
 					headers: {
 						Accept: "application/json",
@@ -128,6 +144,36 @@ function PasswordInspect({setIsnewItem,Loading, password, isNewItem, categories 
 		}
 	};
 
+	const deletePassword = async (password) => {
+		try {
+			const response = await axios.delete(
+				import.meta.env.VITE_API_URL + `/passwords/${
+					password && password.id
+				}`,
+				{
+					headers: {
+						Accept: "application/json",
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			if (response.status === 200) {
+				window.location.reload();
+			}
+		} catch (error) {
+			alert("Failed to delete password! Reason: " + error.response.data.error);
+			console.error(error);
+		}
+	};
+
+	const generateRandomPassword = () => {
+		// Generate a random password here
+		const password = "generated_password"; // Replace with the generated password
+		setGeneratedPassword(password);
+		handleChange("password", password);
+	};
+
 	const copyToClipboard = () => {
 		const tempInput = document.createElement("input");
 		tempInput.value = revealedPassword;
@@ -137,6 +183,11 @@ function PasswordInspect({setIsnewItem,Loading, password, isNewItem, categories 
 		document.body.removeChild(tempInput);
 		alert("Password copied to clipboard!");
 	};
+
+	if (!password) {
+		return <div>No passwords found.</div>;
+	}
+
 
 	return (
 		<>
@@ -176,7 +227,6 @@ function PasswordInspect({setIsnewItem,Loading, password, isNewItem, categories 
 							placeholder={isNewItem ? "Username" : password.username}
 							value={updatedPassword.username || ""}
 							onChange={(e) => handleChange("username", e.target.value)}
-							disabled={!isNewItem}
 						/>
 						<div className={"flex mt-4 w-1/2 drop-shadow-md align"}>
 							{isNewItem ? (
@@ -255,9 +305,16 @@ function PasswordInspect({setIsnewItem,Loading, password, isNewItem, categories 
 							placeholder={isNewItem ? "Enter your notes" : password.note}
 							value={updatedPassword.note || ""}
 							onChange={(e) => handleChange("note", e.target.value)}
-							disabled={!isNewItem}
 						/>
 						<div className={"flex flex-row mt-16 justify-end"}>
+							{!isNewItem && (
+								<button
+									className={"bg-red-500 mr-5 text-black px-4 py-2 mr-auto rounded-lg"}
+									onClick={() => deletePassword(password.id)}
+								>
+									Delete
+								</button>
+							)  }
 							{isNewItem && (
 								<button
 									className={"bg-white mr-5 text-black px-4 py-2 rounded-lg"}
@@ -267,10 +324,10 @@ function PasswordInspect({setIsnewItem,Loading, password, isNewItem, categories 
 								</button>
 							)  }
 
+
 							<button
 								className={"bg-white text-black px-4 py-2 rounded-lg"}
 								onClick={() => setSecurityModal(true)}
-								disabled={!isNewItem}
 							>
 								Save
 							</button>

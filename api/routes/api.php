@@ -34,15 +34,15 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::middleware('auth:sanctum')->group(function() {
-// Update user
-Route::put('/user', [AuthController::class, 'updateUser']);
+    // Update user
+    Route::get('/upgrade', [AuthController::class, 'upgrade']);
 
     // Categories
     Route::post('/categories', [categoryController::class, 'newCategory']);
     Route::get('/categories', [categoryController::class, 'index']);
     Route::get('/categories/{category}', [categoryController::class, 'show']);
     Route::delete('/categories/{id}', [categoryController::class, 'delete']);
-    Route::put('/categories/{id}', [categoryController::class, 'update']);
+    Route::put('/categories/{category}', [categoryController::class, 'update']);
 
     // PasswordItems
     Route::get('/passwords', [PasswordItemController::class, 'index']);
@@ -64,8 +64,6 @@ Route::put('/user', [AuthController::class, 'updateUser']);
 
     //Security check
     Route::post('/security/check', [SecurityCheckController::class, 'checkAllPasswords']);
-
-    // search filter
     Route::get('/filters', [FilterController::class, 'filter']);
 
 });

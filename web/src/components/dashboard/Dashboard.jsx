@@ -9,6 +9,8 @@ import PasswordItem from "../PasswordsView/PasswordItem.jsx";
 import PasswordInspect from "../PasswordsView/PasswordInspect.jsx";
 import SecurityCheckPopupModal from "./SecurityCheckPopupModal.jsx";
 import MasterPasswordPopupModal from "./MasterPasswordPopupModal.jsx";
+import CategoriesCrudPopupModal from "./CategoriesCrudPopupModal.jsx";
+import UserCrudPopupModal from "./UserCrudPopupModal.jsx";
 
 
 const MyContext = createContext();
@@ -29,12 +31,20 @@ export const Dashboard = () => {
     });
     const [isNewItem, setIsNewItem] = useState(false);
     const [securityModal, setSecurityModal] = useState(false); // State to control the modal
+    const [categoryyModal, setCategoryModal] = useState(false); // State to control the modal
+    const [userModal, setUserModal] = useState(false); // State to control the modal
+    const [searchResults, setSearchResults] = useState([]);
+
 
     const toggleNewItem = () => {
         setIsNewItem(!isNewItem);
     }
 
     useEffect(() => {
+        // check local storage for token
+        if (!localStorage.getItem("token")) {
+            window.location.href = "/login";
+        }
         const fetchCategories = async () => {
             try {
                 const response = await axios.get(
@@ -56,6 +66,15 @@ export const Dashboard = () => {
 
         fetchCategories();
     }, []);
+
+    // logout function
+    const logout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("email");
+        localStorage.removeItem("role");
+        localStorage.removeItem("name");
+        window.location.href = "/login";
+    }
 
     const fetchAllPasswords = async () => {
         try {
@@ -119,9 +138,37 @@ export const Dashboard = () => {
         setSecurityModal(true); // Open the modal
     };
 
+    const handleUserCheckClick = () => {
+        setUserModal(true); // Open the modal
+    };
+
     const closeModal = () => {
         setSecurityModal(false); // Close the modal
+        setCategoryModal(false); // Close the modal
+        setUserModal(false); // Close the modal
     };
+    const handCategoryCheckClick = () => {
+        setCategoryModal(true); // Open the modal
+    };
+    const handleSearch = async (query) => {
+        try {
+            const response = await axios.get(
+                import.meta.env.VITE_API_URL + `/filters?search=${query}`,
+                {
+                    headers: {
+                        Accept: "application/json",
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            setPasswords(response.data.passwords.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
 
     return (
         <>
@@ -159,10 +206,10 @@ export const Dashboard = () => {
                         </div>
                         <div className={"w-full h-16 flex flex-row justify-between"}>
                             <div className={"my-auto ml-4"}>
-                                <SignOut color={"#FFFFFF"} size={32} />
+                                <SignOut className={"cursor-pointer"} onClick={logout} color={"#FFFFFF"} size={32} />
                             </div>
                             <div className={"my-auto mr-4"}>
-                                <UserGear color={"#FFFFFF"} size={32} />
+                                <UserGear className={"cursor-pointer"} onClick={handleUserCheckClick} color={"#FFFFFF"} size={32} />
                             </div>
                         </div>
                     </div>
@@ -171,10 +218,12 @@ export const Dashboard = () => {
                     <input
                         placeholder={"Zoeken....."}
                         type={"text"}
+                        onChange={(e) => handleSearch(e.target.value)}
                         className={
                             "w-2/4 h-full relative drop-shadow-md flex placeholder-white bg-transparent items-center justify-end px-4 py-2 text-white bg-none rounded-lg border border-white  backdrop-filter focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-25"
                         }
-                    ></input>
+                    />
+
                     <div className={"w-full h-full flex flex-row justify-end"}>
                         <button
                             onClick={handleSecurityCheckClick} // Handle security check button click
@@ -183,7 +232,7 @@ export const Dashboard = () => {
                             Security check
                         </button>
                         <button onClick={() => toggleNewItem()} className={"bg-white text-black px-4 py-2 rounded-lg ml-4"}>New wachtwoord</button>
-                        <button className={"bg-white text-black px-4 py-2 rounded-lg ml-4"}>New category</button>
+                        <button onClick={() => handCategoryCheckClick()} className={"bg-white text-black px-4 py-2 rounded-lg ml-4"}>Edit categories</button>
                     </div>
                 </div>
                 <div className="row-span-9 col-span-12 bg-white rounded-lg shadow-2xl bg-opacity-20 backdrop-filter backdrop-blur-sm">
@@ -199,12 +248,14 @@ export const Dashboard = () => {
                     </div>
                 </div>
                 {securityModal && (
-                    <MasterPasswordPopupModal onClose={closeModal}/>
+                    <SecurityCheckPopupModal onClose={closeModal}/>
                 )}
-                {securityModal && (
-                    <MasterPasswordPopupModal onClose={closeModal}/>
+                {categoryyModal && (
+                    <CategoriesCrudPopupModal onClose={closeModal}/>
                 )}
-
+                {userModal && (
+                    <UserCrudPopupModal onClose={closeModal}/>
+                )}
             </div>
         </>
     );

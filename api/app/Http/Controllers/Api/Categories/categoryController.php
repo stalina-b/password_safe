@@ -67,10 +67,9 @@ class categoryController extends Controller
         ], 200);
     }
     // update category
-    public function update(Request $request, $id)
+    public function update(Request $request, category $category)
     {
         try {
-            $category = category::find($id)->where('email', auth()->user()->email);
             if (!$category) {
                 return response()->json([
                     'status' => false,

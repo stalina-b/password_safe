@@ -19,6 +19,10 @@ return new class extends Migration
             $table->string('password');
             /** ENUM */
             $table->string('role');
+            // Paid user
+            $table->string('iban')->nullable();
+            $table->string('address')->nullable();
+            $table->string('phone_number')->nullable();
             /** end ENUM */
             $table->rememberToken();
             $table->timestamps();

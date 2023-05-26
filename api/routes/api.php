@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+// user creation and login
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::get('/login', function () {
@@ -34,6 +34,9 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::middleware('auth:sanctum')->group(function() {
+// Update user
+Route::put('/user', [AuthController::class, 'updateUser']);
+
     // Categories
     Route::post('/categories', [categoryController::class, 'newCategory']);
     Route::get('/categories', [categoryController::class, 'index']);
@@ -62,7 +65,7 @@ Route::middleware('auth:sanctum')->group(function() {
     //Security check
     Route::post('/security/check', [SecurityCheckController::class, 'checkAllPasswords']);
 
-    // Filter 
+    // search filter
     Route::get('/filters', [FilterController::class, 'filter']);
 
     //User delete
@@ -71,4 +74,5 @@ Route::middleware('auth:sanctum')->group(function() {
 
     //Logout
     Route::post('/auth/logout', [AuthController::class, 'logout']);
+  
 });

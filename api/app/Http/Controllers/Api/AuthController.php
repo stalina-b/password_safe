@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
+use App\Http\Requests\UpdateUserRequest;
 
 class AuthController extends Controller
 {
@@ -22,13 +23,15 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         try {
-            $validateUser = Validator::make($request->all(),
+            $validateUser = Validator::make(
+                $request->all(),
                 [
                     'name' => 'required',
                     'email' => 'required|email|unique:users,email',
                     'password' => 'required'
-                ]);
-            if($validateUser->fails()){
+                ]
+            );
+            if ($validateUser->fails()) {
                 return response()->json([
                     'status' => false,
                     'message' => 'validation error',
@@ -49,7 +52,6 @@ class AuthController extends Controller
                 'token' => $user->createToken("API TOKEN")->plainTextToken,
                 'user' => User::find($user->id),
             ], 200);
-
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -66,13 +68,15 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         try {
-            $validateUser = Validator::make($request->all(),
+            $validateUser = Validator::make(
+                $request->all(),
                 [
                     'email' => 'required|email',
                     'password' => 'required'
-                ]);
+                ]
+            );
 
-            if($validateUser->fails()){
+            if ($validateUser->fails()) {
                 return response()->json([
                     'status' => false,
                     'message' => 'validation error',
@@ -80,7 +84,7 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            if(!Auth::attempt($request->only(['email', 'password']))){
+            if (!Auth::attempt($request->only(['email', 'password']))) {
                 return response()->json([
                     'status' => false,
                     'errors' => 'Email & Password does not match with our record.',
@@ -95,7 +99,6 @@ class AuthController extends Controller
                 'token' => $user->createToken("API TOKEN")->plainTextToken,
                 'user' => $user,
             ], 200);
-
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -115,5 +118,31 @@ class AuthController extends Controller
         return [
             'message' => 'User logged out'
         ];
+
+    // premium user upgrade
+    public function updateUser(UpdateUserRequest $request)
+    {
+        $user = Auth::user();
+
+        // check if the user is already a premium user
+        if ($user->role === UserRoleEnum::PREMIUM) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User is already a premium user.',
+            ], 400);
+        }
+
+        $request->update([
+            'iban' => $request->input('iban'),
+            'address' => $request->input('address'),
+            'phone_number' => $request->input('phone_number'),
+            'role' => UserRoleEnum::PREMIUM,
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'You are now a premium user.',
+            'user' => $user,
+        ], 200);
     }
 }

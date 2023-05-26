@@ -189,9 +189,12 @@ export const Dashboard = () => {
                     className="col-span-2 row-span-10 rounded-lg shadow-2xl bg-white bg-opacity-20 backdrop-filter backdrop-blur-sm"
                 >
                     <div className="flex flex-col h-full w-full">
-                        <div className="w-full text-center flex justify-center h-32 border-b-white border-opacity-20 border-b-2">
+                        <div className="w-full flex flex-col text-center justify-center h-32 border-b-white border-opacity-20 border-b-2">
                             <p className="font-lato my-auto text-white text-3xl">
                                 Hoi, <span className="text-fuchsia-600">{localStorage.getItem("name")}</span>
+                            </p>
+                            <p className="font-lato mb-4 text-white text-xl">
+                                <span className="text-white">{localStorage.getItem("role")}</span>
                             </p>
                         </div>
                         <div className="flex flex-col h-full w-full overflow-y-auto">

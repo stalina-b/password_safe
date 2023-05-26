@@ -12,7 +12,10 @@ function generateSecurePassword(length) {
 		const randomIndex = Math.floor(Math.random() * characters.length);
 		password += characters.charAt(randomIndex);
 	}
-
+	// make sure that the password contains a special character and a number
+	if (!password.match(/\d/) || !password.match(/[!@#$%^&*()]/)) {
+		return generateSecurePassword(length);
+	}
 	return password;
 }
 
@@ -26,7 +29,7 @@ function PasswordInspect({ setIsnewItem, Loading, password, isNewItem, categorie
 	const [generatedPassword, setGeneratedPassword] = useState("");
 
 	const generatePassword = () => {
-		const generatedPassword = generateSecurePassword(12); // Change the length as per your requirements
+		const generatedPassword = generateSecurePassword(15); // Change the length as per your requirements
 		setGeneratedPassword(generatedPassword);
 		handleChange("password", generatedPassword);
 	};
@@ -116,7 +119,7 @@ function PasswordInspect({ setIsnewItem, Loading, password, isNewItem, categorie
 				window.location.reload();
 			}
 		} catch (error) {
-			alert("Item update failed! Reason: " + error.response.data.error);
+				alert("Item update failed! Reason: " + error.response.data.message);
 			console.error(error);
 		}
 	};

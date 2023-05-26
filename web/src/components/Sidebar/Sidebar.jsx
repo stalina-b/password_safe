@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import GlassmorphicButton from "./CategoriesButton.jsx";
 import {SignOut, UserGear} from "@phosphor-icons/react";
+import {Link, Route} from "react-router-dom";
 
 function SidebarCategories() {
   const [categories, setCategories] = useState([]);
@@ -11,7 +12,7 @@ function SidebarCategories() {
 
     const fetchData = async () => {
       try {
-        const response = await fetch(import.meta.env.VITE_API_URL + '/category', {
+        const response = await fetch(import.meta.env.VITE_API_URL + '/categories', {
           method: 'GET',
           headers: {
             'Authorization': "Bearer " + localStorage.getItem("token"),
@@ -36,6 +37,7 @@ function SidebarCategories() {
 
   }, []);
 
+
   return (
       <div className="col-span-2 row-span-10 rounded-lg shadow-2xl bg-white bg-opacity-20 backdrop-filter backdrop-blur-sm">
         <div className="flex flex-col h-full w-full">
@@ -45,14 +47,16 @@ function SidebarCategories() {
             </p>
           </div>
           <div className="flex flex-col h-full w-full overflow-y-auto">
-              {categories.map((category) => (
-                  <div className={"mt-5"} key={category.id}>
+            {categories.map((category) => (
+                <div className={"mt-5"} key={category.id}>
+                  <Link to={"/dashboard/" + category.name}>
                     <GlassmorphicButton
                         text={category.name}
                         isLoading={loading}
                     />
-                  </div>
-              ))}
+                  </Link>
+                </div>
+            ))}
           </div>
           <div className={"w-full h-16 flex flex-row justify-between"}>
             <div className={"my-auto ml-4"}>

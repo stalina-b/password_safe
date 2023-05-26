@@ -5,24 +5,24 @@ import SidebarCategories from "../components/Sidebar/Sidebar";
 import jpg from "../assets/render.jpg";
 
 const Dashboard = () => {
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-    const handleMouseMove = (event) => {
-        setMousePosition({ x: event.clientX, y: event.clientY });
-    };
-
-    useEffect(() => {
-        window.addEventListener("mousemove", handleMouseMove);
-
-        return () => {
-            window.removeEventListener("mousemove", handleMouseMove);
-        };
-    }, []);
-
-    const parallaxOffset = 200;
-
-    const backgroundPositionX = -(mousePosition.x / parallaxOffset);
-    const backgroundPositionY = -(mousePosition.y / parallaxOffset);
+    // const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    //
+    // const handleMouseMove = (event) => {
+    //     setMousePosition({ x: event.clientX, y: event.clientY });
+    // };
+    //
+    // useEffect(() => {
+    //     window.addEventListener("mousemove", handleMouseMove);
+    //
+    //     return () => {
+    //         window.removeEventListener("mousemove", handleMouseMove);
+    //     };
+    // }, []);
+    //
+    // const parallaxOffset = 200;
+    //
+    // const backgroundPositionX = -(mousePosition.x / parallaxOffset);
+    // const backgroundPositionY = -(mousePosition.y / parallaxOffset);
 
     return (
         <div
@@ -43,12 +43,11 @@ const Dashboard = () => {
                     transform: "scale(1.1)",
                     background: `url(${jpg})`,
                     backgroundSize: "cover",
-                    backgroundPosition: `${backgroundPositionX}px ${backgroundPositionY}px`,
+                    // backgroundPosition: `${backgroundPositionX}px ${backgroundPositionY}px`,
                 }}
             />
             <SidebarCategories />
             <Searchbar />
-            <Passwords />
         </div>
     );
 };

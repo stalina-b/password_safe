@@ -4,11 +4,11 @@ const GlassmorphicButton = ({text, isLoading }) => {
 
 	return (
 		<button
-			className="relative flex items-center justify-center w-48 mx-auto h-12 px-4 py-2 text-white bg-auto rounded-lg border border-white border-opacity-25 backdrop-filter focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-25"
+			className="relative flex items-center justify-center w-48 mx-auto h-12 px-4 py-2 text-black bg-white rounded-lg border border-white border-opacity-25 backdrop-filter focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-25"
 			disabled={isLoading}
 		>
 			{!isLoading && text && (
-				<span className="absolute inset-0 flex items-center text-2xl text-white justify-center">
+				<span className="absolute inset-0 flex items-center text-xl text-black text-opacity-70 justify-center">
           {text}
         </span>
 			)}

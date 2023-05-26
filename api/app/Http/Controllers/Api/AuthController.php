@@ -8,9 +8,11 @@ use App\Models\PasswordItem;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DeleteUserRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\JsonResponse;
 use App\Http\Requests\UpdateUserRequest;
 
 class AuthController extends Controller
@@ -123,6 +125,18 @@ class AuthController extends Controller
             ], 500);
         }
     }
+    public function destroy(DeleteUserRequest $request): JsonResponse
+    {
+        return new JsonResponse([
+            'data' => $request->user()->delete(),
+        ]);
+    }
+    public function logout(Request $request)
+    {
+        auth('sanctum')->user()->tokens()->delete();
+        return [
+            'message' => 'User logged out'
+        ];
 
     // premium user upgrade
     public function upgrade(Request $request)
